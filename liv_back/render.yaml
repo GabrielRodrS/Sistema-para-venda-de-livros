@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: liv-back
+    env: docker
+    plan: free
+    dockerfilePath: ./dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: postgresql://livraria_0onm_user:PhDghrSnwyYhUfTtdP5z7YHzOCvAhu7I@dpg-d0h2o3adbo4c73btsp50-a/livraria_0onm
+      - key: FRONTEND_URL
+        value: https://sistema-para-venda-de-livros.vercel.app/

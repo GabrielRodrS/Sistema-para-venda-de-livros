@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: livraria-backend
+    env: docker
+    plan: free
+    branch: main
+    dockerfilePath: liv_back/Dockerfile
+    envVars:
+      - key: DB_HOST
+        value: dpg-d0h2o3adbo4c73btsp50-a
+      - key: DB_PORT
+        value: 5432
+      - key: DB_USER
+        value: livraria_0onm_user
+      - key: DB_PASSWORD
+        value: PhDghrSnwyYhUfTtdP5z7YHzOCvAhu7I
+      - key: DB_NAME
+        value: Livraria

@@ -1,0 +1,19 @@
+FROM node:24-alpine AS builder
+LABEL maintainer="GabrielRS"
+WORKDIR /livrariaback
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm install -g @nestjs/cli
+RUN npm install class-validator class-transformer
+RUN nest build
+
+FROM node:24-alpine
+WORKDIR /livrariaback
+COPY package*.json ./
+RUN npm install --omit=dev
+COPY --from=builder /livrariaback/dist ./dist
+COPY --from=builder /livrariaback/node_modules ./node_modules
+EXPOSE 3000
+ENV PORT=3000
+CMD ["node", "dist/main"]
