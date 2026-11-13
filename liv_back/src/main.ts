@@ -6,6 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = app.get(ConfigService);
+
   const frontendUrl =
     config.get<string>('FRONTEND_URL') || 'http://localhost:3001';
 
@@ -14,7 +15,10 @@ async function bootstrap() {
   });
 
   const port = process.env.PORT || 3000;
-  await app.listen(port);
+
+  await app.listen(port, '0.0.0.0');
+
   console.log(`🚀 Backend rodando na porta ${port}`);
 }
+
 bootstrap();
