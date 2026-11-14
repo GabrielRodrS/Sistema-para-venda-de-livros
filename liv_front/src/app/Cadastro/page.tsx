@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { User, Phone, Mail, LockKeyhole, LogIn, UserPlus } from "lucide-react";
 import axios, { AxiosError } from "axios";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Cadastro() {
   const [msg, setMsg] = useState("");
 
@@ -13,10 +15,9 @@ export default function Cadastro() {
   const [tel, setTel] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [carregando, setCarregando] = useState(false);
 
   const router = useRouter();
-
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const formatarTelefone = (valor: string): string => {
     valor = valor.replace(/\D/g, "");
@@ -54,6 +55,8 @@ export default function Cadastro() {
     const dados = { nome, telefone: tel, email, senha };
 
     try {
+      setCarregando(true);
+
       await axios.post(`${API_URL}/usuarios`, dados, {
         headers: {
           "Content-Type": "application/json",
@@ -70,6 +73,8 @@ export default function Cadastro() {
       } else {
         setMsg("Erro inesperado. Tente novamente!");
       }
+    } finally {
+      setCarregando(false);
     }
   };
 
@@ -173,7 +178,14 @@ export default function Cadastro() {
           </div>
         </div>
 
-        {/* Mensagem */}
+        {/* Mensagem de inicialização */}
+        {carregando && (
+          <div className="mt-5 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm text-center font-medium">
+            Iniciando serviços, pode levar até 2 minutos...
+          </div>
+        )}
+
+        {/* Mensagem de erro */}
         {msg && (
           <div className="mt-5 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm text-center font-medium">
             {msg}
@@ -183,17 +195,19 @@ export default function Cadastro() {
         {/* Botões */}
         <div className="flex flex-col gap-3 mt-7 mb-8">
           <button
-            className="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
             type="submit"
+            disabled={carregando}
           >
             <UserPlus size={19} />
-            Criar minha conta
+            {carregando ? "Aguarde..." : "Criar minha conta"}
           </button>
 
           <button
             className="w-full flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-amber-400 hover:bg-amber-50 text-gray-700 font-semibold py-3 rounded-xl transition-all duration-200 cursor-pointer"
             type="button"
             onClick={() => router.push("/")}
+            disabled={carregando}
           >
             <LogIn size={19} />
             Já tenho uma conta
