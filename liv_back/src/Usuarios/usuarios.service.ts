@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Usuario } from './usuarios.entity';
@@ -30,6 +31,14 @@ export class UsuariosService {
     email: string,
     senha: string,
   ): Promise<Usuario> {
+    const usuarioExistente = await this.usuariosRepository.findOne({
+      where: { email },
+    });
+
+    if (usuarioExistente) {
+      throw new ConflictException('Este e-mail já está cadastrado!');
+    }
+
     const usuario = this.usuariosRepository.create({
       nome,
       telefone,
