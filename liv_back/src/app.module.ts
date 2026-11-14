@@ -25,7 +25,7 @@ import { PesquisasModule } from './Pesquisas/pesquisas.module';
             type: 'postgres',
             url: databaseUrl,
             autoLoadEntities: true,
-            synchronize: true,
+            synchronize: false,
           };
         }
 
