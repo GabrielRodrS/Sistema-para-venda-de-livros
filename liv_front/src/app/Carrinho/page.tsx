@@ -18,14 +18,14 @@ export interface Item {
   livro: object;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Carrinho() {
   const [user, setUser] = useState<userData | null>(null);
   const [itens, setItens] = useState<Item[]>([]);
   const [paraComprar, setParaComprar] = useState<number[]>([]);
 
   const router = useRouter();
-
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   function removerDuplicadosDoLocalStorage() {
     // Recupera os dados do localStorage
@@ -40,9 +40,11 @@ export default function Carrinho() {
 
   useEffect(() => {
     const infoUser = localStorage.getItem("user");
+
     if (infoUser) {
       setUser(JSON.parse(infoUser));
     }
+
     localStorage.setItem("preco", "0");
   }, []);
 
@@ -56,6 +58,7 @@ export default function Carrinho() {
         const response = await axios.get(
           `${API_URL}/carrinhos/buscar/${user.email}`,
         );
+
         setItens(response.data);
       } catch (error) {
         console.error("Erro ao buscar itens do carrinho!", error);
@@ -68,9 +71,9 @@ export default function Carrinho() {
   return (
     <Header>
       <main className="h-10/11 w-full flex items-center justify-center">
-        <div className="w-3/10 h-9/10 flex flex-col items-center rounded-sm border-2 ">
-          <div className=" h-1/7 w-full flex flex-row space-x-3 items-center justify-center text-2xl font-bold bg-gray-900 rounded-t-sm  text-amber-400">
-            <ShoppingCart width={35} height={35}></ShoppingCart>
+        <div className="w-3/10 h-9/10 flex flex-col items-center rounded-sm border-2">
+          <div className="h-1/7 w-full flex flex-row space-x-3 items-center justify-center text-2xl font-bold bg-gray-900 rounded-t-sm text-amber-400">
+            <ShoppingCart width={35} height={35} />
             <p>Seu carrinho</p>
           </div>
 
@@ -83,11 +86,12 @@ export default function Carrinho() {
                       item={item}
                       paraComprar={paraComprar}
                       setParaComprar={setParaComprar}
-                    ></Pedido>
+                    />
                   ) : null,
                 )
               : null}
           </section>
+
           <div className="h-1/7 w-full bg-gray-300 rounded-b-sm flex flex-row items-center justify-center space-x-20">
             <button
               type="button"
@@ -98,6 +102,7 @@ export default function Carrinho() {
             >
               Voltar ao catálogo
             </button>
+
             <button
               type="button"
               className="bg-green-500 py-2 px-3 rounded-md cursor-pointer hover:text-amber-400"
@@ -106,7 +111,9 @@ export default function Carrinho() {
                   "selecionados",
                   JSON.stringify(paraComprar),
                 );
+
                 console.log(paraComprar);
+
                 removerDuplicadosDoLocalStorage();
 
                 if (localStorage.getItem("selecionados") !== "[]") {
