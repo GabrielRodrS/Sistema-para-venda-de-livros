@@ -39,7 +39,7 @@ import { PesquisasModule } from './Pesquisas/pesquisas.module';
             password: configService.get<string>('DB_PASSWORD'),
             database: configService.get<string>('DB_NAME'),
             autoLoadEntities: true,
-            synchronize: false, // use com cautela localmente
+            synchronize: true, // use com cautela localmente
           };
         }
       },
