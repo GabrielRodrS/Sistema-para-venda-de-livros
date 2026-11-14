@@ -1,10 +1,13 @@
 "use client";
+
 import Header from "../../Components/Header";
 import { User } from "lucide-react";
 import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import userData from "../Interfaces/User";
 import axios from "axios";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function ExcluirConta() {
   const [user, setUser] = useState<userData | null>(null);
@@ -16,6 +19,7 @@ export default function ExcluirConta() {
 
   useEffect(() => {
     const infoUser = localStorage.getItem("user");
+
     if (infoUser) {
       setUser(JSON.parse(infoUser));
     }
@@ -34,11 +38,13 @@ export default function ExcluirConta() {
       return;
     }
 
-    const dados = { email: user?.email, senha: suaSenha };
+    const dados = { email: user.email, senha: suaSenha };
+
     try {
-      await axios.delete("http://localhost:3000/usuarios/deletar", {
+      await axios.delete(`${API_URL}/usuarios/deletar`, {
         data: dados,
       });
+
       localStorage.removeItem("user");
       router.push("/");
     } catch (error) {
@@ -56,15 +62,17 @@ export default function ExcluirConta() {
     <Header>
       <form onSubmit={removerConta} className="w-full h-full">
         <main className="flex h-full w-full items-center justify-center">
-          <section className=" w-2/6 h-5/6">
+          <section className="w-2/6 h-5/6">
             <div className="h-1/5 w-full bg-gray-900 flex flex-col items-center justify-center rounded-t-md">
-              <User height={40} width={40} className="text-amber-400"></User>
+              <User height={40} width={40} className="text-amber-400" />
             </div>
+
             <div className="shadow-2xl rounded-b-md">
               <div className="h-3/5 w-full flex flex-col items-center py-5 space-y-5 text-black">
                 <p className="font-bold text-xl text-amber-800">
                   Deseja realmente deletar a conta?
                 </p>
+
                 <div className="flex flex-row space-x-2 items-center">
                   <label>Sua senha:</label>
                   <input
@@ -72,32 +80,35 @@ export default function ExcluirConta() {
                     className="border-3 border-black rounded-md py-2 px-3 text-gray-800 w-50"
                     placeholder="Sua senha"
                     value={suaSenha}
-                    onChange={(e) => {
-                      setSuaSenha(e.target.value);
-                    }}
-                  ></input>
+                    onChange={(e) => setSuaSenha(e.target.value)}
+                  />
                 </div>
+
                 <div className="flex flex-row items-start space-x-2">
-                  <label className="">
-                    Descrição<br></br>do motivo
-                    <br></br>(Opcional)
+                  <label>
+                    Descrição
+                    <br />
+                    do motivo
+                    <br />
+                    (Opcional)
                   </label>
+
                   <textarea
                     className="border-3 border-black rounded-md py-2 px-3 text-gray-800 w-50 h-20"
                     placeholder="Descrição"
                     value={descricao}
-                    onChange={(e) => {
-                      setDescricao(e.target.value);
-                    }}
-                  ></textarea>
+                    onChange={(e) => setDescricao(e.target.value)}
+                  />
                 </div>
+
                 {msg && <p className="font-semibold text-red-700">{msg}</p>}
               </div>
             </div>
-            <div className="h-1/5 w-full flex flex-row items-center justify-center shadow-2xl rounded-b-md py-5 space-x-20 text-black bg-gray-300 ">
+
+            <div className="h-1/5 w-full flex flex-row items-center justify-center shadow-2xl rounded-b-md py-5 space-x-20 text-black bg-gray-300">
               <button
                 type="button"
-                className="bg-amber-300 py-2 px-3 rounded-md hover:text-white cursor-pointer "
+                className="bg-amber-300 py-2 px-3 rounded-md hover:text-white cursor-pointer"
                 onClick={() => {
                   localStorage.removeItem("user");
                   router.push("/");
@@ -105,9 +116,10 @@ export default function ExcluirConta() {
               >
                 Sair da sessão
               </button>
+
               <button
                 type="submit"
-                className="bg-red-500 py-2 px-3 rounded-md hover:text-white cursor-pointer "
+                className="bg-red-500 py-2 px-3 rounded-md hover:text-white cursor-pointer"
               >
                 Excluir conta
               </button>

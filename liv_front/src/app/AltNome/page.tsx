@@ -14,6 +14,8 @@ export default function AltNome() {
 
   const router = useRouter();
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   useEffect(() => {
     const InfoUser = localStorage.getItem("user");
     if (InfoUser) {
@@ -35,10 +37,7 @@ export default function AltNome() {
     const dados = { email: user?.email, nome: nome };
 
     try {
-      const response = await axios.patch(
-        "http://localhost:3000/usuarios/nome",
-        dados
-      );
+      const response = await axios.patch(`${API_URL}/usuarios/nome`, dados);
 
       const novoUser = { ...user, nome: response.data.nome || nome };
 

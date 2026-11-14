@@ -16,6 +16,8 @@ export default function AltSenha() {
 
   const router = useRouter();
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   useEffect(() => {
     const infoUser = localStorage.getItem("user");
 
@@ -41,7 +43,7 @@ export default function AltSenha() {
     };
 
     try {
-      await axios.patch("http://localhost:3000/usuarios/senha", dados);
+      await axios.patch(`${API_URL}/usuarios/senha`, dados);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Erro ao alterar senha:", error.message);

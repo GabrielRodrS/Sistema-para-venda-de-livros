@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Livro } from "../../Components/InterfacePContent";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Informacoes() {
   const nav1 = "Adicionar ao carrinho";
   const navr1 = "/Carrinho";
@@ -23,14 +25,14 @@ export default function Informacoes() {
 
   useEffect(() => {
     if (livro?.disponiveis) {
-      setDisp(livro?.disponiveis);
+      setDisp(livro.disponiveis);
     }
   }, [livro]);
 
   useEffect(() => {
     if (codigo) {
       axios
-        .get(`http://localhost:3000/livros/selecionado/${codigo}`)
+        .get(`${API_URL}/livros/selecionado/${codigo}`)
         .then((response) => {
           console.log("Livro selecionado:", response.data);
           setLivro(response.data);
@@ -38,7 +40,7 @@ export default function Informacoes() {
         .catch((error) => {
           console.error(
             "Erro ao buscar livro selecionado!",
-            error.response?.data || error.message || error
+            error.response?.data || error.message || error,
           );
         });
     }

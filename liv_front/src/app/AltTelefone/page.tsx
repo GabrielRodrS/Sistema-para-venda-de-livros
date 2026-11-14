@@ -28,6 +28,8 @@ export default function AltTelefone() {
 
   const router = useRouter();
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   useEffect(() => {
     const infoUser = localStorage.getItem("user");
     if (infoUser) {
@@ -48,10 +50,7 @@ export default function AltTelefone() {
     const dados = { email: user?.email, telefone: telefone };
 
     try {
-      const response = await axios.patch(
-        "http://localhost:3000/usuarios/telefone",
-        dados
-      );
+      const response = await axios.patch(`${API_URL}/usuarios/telefone`, dados);
 
       const novoUser = {
         ...user,
@@ -64,6 +63,7 @@ export default function AltTelefone() {
       console.error("Erro ao alterar telefone!", error);
     }
   };
+
   return (
     <Header>
       <BlocoPerfil>

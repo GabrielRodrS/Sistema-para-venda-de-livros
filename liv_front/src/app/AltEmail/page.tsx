@@ -15,6 +15,8 @@ export default function AltEmail() {
 
   const router = useRouter();
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   useEffect(() => {
     const InfoUser = localStorage.getItem("user");
     if (InfoUser) {
@@ -32,15 +34,20 @@ export default function AltEmail() {
 
     if (!user) return;
 
-    const dados = { novoEmail: novoEmail, email: user.email, senha: senha };
+    const dados = {
+      novoEmail: novoEmail,
+      email: user.email,
+      senha: senha,
+    };
 
     try {
-      const response = await axios.patch(
-        "http://localhost:3000/usuarios/email",
-        dados
-      );
+      const response = await axios.patch(`${API_URL}/usuarios/email`, dados);
 
-      const novoUser = { ...user, email: response.data.email || novoEmail };
+      const novoUser = {
+        ...user,
+        email: response.data.email || novoEmail,
+      };
+
       localStorage.setItem("user", JSON.stringify(novoUser));
 
       router.push("/Perfil");
@@ -79,10 +86,12 @@ export default function AltEmail() {
               />
             </div>
           </div>
+
           <div className="flex items-center justify-center mb-5">
             {msg && <p className="font-semibold text-red-700 mt-3">{msg}</p>}
           </div>
-          <div className="h-2/5 w-full flex flex-row items-center justify-center shadow-2xl rounded-b-md py-5 space-x-20 text-black bg-gray-300 ">
+
+          <div className="h-2/5 w-full flex flex-row items-center justify-center shadow-2xl rounded-b-md py-5 space-x-20 text-black bg-gray-300">
             <button
               type="button"
               className="bg-red-500 py-2 px-3 rounded-md hover:text-white cursor-pointer"
@@ -92,6 +101,7 @@ export default function AltEmail() {
             >
               Voltar ao perfil
             </button>
+
             <button
               type="submit"
               className="bg-amber-300 py-2 px-3 rounded-md hover:text-white cursor-pointer"

@@ -25,8 +25,10 @@ export default function Carrinho() {
 
   const router = useRouter();
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   function removerDuplicadosDoLocalStorage() {
-    // Recupera os dados do localStorage (exemplo com um array de números)
+    // Recupera os dados do localStorage
     const dados = JSON.parse(localStorage.getItem("selecionados") || "[]");
 
     // Remove duplicados utilizando o Set
@@ -52,7 +54,7 @@ export default function Carrinho() {
     const buscarItens = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/carrinhos/buscar/${user.email}`
+          `${API_URL}/carrinhos/buscar/${user.email}`,
         );
         setItens(response.data);
       } catch (error) {
@@ -82,7 +84,7 @@ export default function Carrinho() {
                       paraComprar={paraComprar}
                       setParaComprar={setParaComprar}
                     ></Pedido>
-                  ) : null
+                  ) : null,
                 )
               : null}
           </section>
@@ -102,7 +104,7 @@ export default function Carrinho() {
               onClick={() => {
                 localStorage.setItem(
                   "selecionados",
-                  JSON.stringify(paraComprar)
+                  JSON.stringify(paraComprar),
                 );
                 console.log(paraComprar);
                 removerDuplicadosDoLocalStorage();
